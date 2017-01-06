@@ -93,5 +93,4 @@ var KrakenClient = (function () {
     };
     return KrakenClient;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = KrakenClient;
+exports.KrakenClient = KrakenClient;

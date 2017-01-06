@@ -8,7 +8,7 @@ import * as querystring from 'query-string';
  * @param {String} secret API Secret
  * @param {String} [otp]  Two-factor password (optional) (also, doesn't work)
  */
-export default class KrakenClient {
+export class KrakenClient {
 
 	private config: any;
 

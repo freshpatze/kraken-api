@@ -1,6 +1,6 @@
 "use strict";
 var kraken_1 = require("../kraken");
-var kraken = new kraken_1.default('', '', undefined);
+var kraken = new kraken_1.KrakenClient('', '', undefined);
 kraken.api('Ticker', { "pair": 'XXBTZEUR' }, function (error, data) {
     if (error) {
         console.log(error);

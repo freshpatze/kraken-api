@@ -1,4 +1,4 @@
-import KrakenClient from '../kraken';
+import {KrakenClient} from '../kraken';
 var kraken = new KrakenClient('', '', undefined);
 
 /*
