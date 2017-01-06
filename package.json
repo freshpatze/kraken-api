@@ -1,13 +1,21 @@
 {
   "name": "kraken-exchange-api",
-  "version": "0.1.0",
-  "description": "Kraken API Client for Node.JS",
-  "main": "kraken.js",
-  "dependencies": {
-    "querystring": ">=0.2.0",
-    "request": ">=2.27.0"
+  "version": "0.2.0",
+  "engines": {
+    "node": ">=6.4.0"
   },
-  "devDependencies": {},
+  "description": "Kraken API Client for Node.JS",
+  "main": "./build/kraken.js",
+  "types": "./kraken.d.ts",
+  "dependencies": {
+    "query-string": ">=4.2.3",
+    "request": ">=2.79.0"
+  },
+  "devDependencies": {
+    "@types/node": "^6.0.58",
+    "@types/query-string": "^3.0.31",
+    "@types/request": "0.0.39"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -1,6 +1,6 @@
-var request		= require('request');
-var crypto		= require('crypto');
-var querystring	= require('querystring');
+import * as request from 'request';
+import * as crypto from 'crypto';
+import * as querystring from 'query-string';
 
 /**
  * KrakenClient connects to the Kraken.com API
@@ -8,17 +8,20 @@ var querystring	= require('querystring');
  * @param {String} secret API Secret
  * @param {String} [otp]  Two-factor password (optional) (also, doesn't work)
  */
-function KrakenClient(key, secret, otp) {
-	var self = this;
+export default class KrakenClient {
 
-	var config = {
-		url: 'https://api.kraken.com',
-		version: '0',
-		key: key,
-		secret: secret,
-		otp: otp,
-		timeoutMS: 5000
-	};
+	private config: any;
+
+	constructor(key: string, secret: string, otp: string) {
+		this.config = {
+				url: 'https://api.kraken.com',
+				version: '0',
+				key: key,
+				secret: secret,
+				otp: otp,
+				timeoutMS: 5000
+			};
+	}
 
 	/**
 	 * This method makes a public or private API request.
@@ -27,16 +30,16 @@ function KrakenClient(key, secret, otp) {
 	 * @param  {Function} callback A callback function to be executed when the request is complete
 	 * @return {Object}            The request object
 	 */
-	function api(method, params, callback) {
+	public api(method, params, callback) {
 		var methods = {
 			public: ['Time', 'Assets', 'AssetPairs', 'Ticker', 'Depth', 'Trades', 'Spread', 'OHLC'],
 			private: ['Balance', 'TradeBalance', 'OpenOrders', 'ClosedOrders', 'QueryOrders', 'TradesHistory', 'QueryTrades', 'OpenPositions', 'Ledgers', 'QueryLedgers', 'TradeVolume', 'AddOrder', 'CancelOrder']
 		};
 		if(methods.public.indexOf(method) !== -1) {
-			return publicMethod(method, params, callback);
+			return this.publicMethod(method, params, callback);
 		}
 		else if(methods.private.indexOf(method) !== -1) {
-			return privateMethod(method, params, callback);
+			return this.privateMethod(method, params, callback);
 		}
 		else {
 			throw new Error(method + ' is not a valid API method.');
@@ -50,13 +53,13 @@ function KrakenClient(key, secret, otp) {
 	 * @param  {Function} callback A callback function to be executed when the request is complete
 	 * @return {Object}            The request object
 	 */
-	function publicMethod(method, params, callback) {
+	private publicMethod(method, params, callback) {
 		params = params || {};
 
-		var path	= '/' + config.version + '/public/' + method;
-		var url		= config.url + path;
+		var path	= '/' + this.config.version + '/public/' + method;
+		var url		= this.config.url + path;
 
-		return rawRequest(url, {}, params, callback);
+		return this.rawRequest(url, {}, params, callback);
 	}
 
 	/**
@@ -66,26 +69,26 @@ function KrakenClient(key, secret, otp) {
 	 * @param  {Function} callback A callback function to be executed when the request is complete
 	 * @return {Object}            The request object
 	 */
-	function privateMethod(method, params, callback) {
+	private privateMethod(method, params, callback) {
 		params = params || {};
 
-		var path	= '/' + config.version + '/private/' + method;
-		var url		= config.url + path;
+		var path	= '/' + this.config.version + '/private/' + method;
+		var url		= this.config.url + path;
 
-		params.nonce = new Date() * 1000; // spoof microsecond
+		params.nonce = +new Date() * 1000; // spoof microsecond
 
-		if(config.otp !== undefined) {
-			params.otp = config.otp;
+		if(this.config.otp !== undefined) {
+			params.otp = this.config.otp;
 		}
 
-		var signature = getMessageSignature(path, params, params.nonce);
+		var signature = this.getMessageSignature(path, params, params.nonce);
 
 		var headers = {
-			'API-Key': config.key,
+			'API-Key': this.config.key,
 			'API-Sign': signature
 		};
 
-		return rawRequest(url, headers, params, callback);
+		return this.rawRequest(url, headers, params, callback);
 	}
 
 	/**
@@ -95,14 +98,14 @@ function KrakenClient(key, secret, otp) {
 	 * @param  {Integer} nonce   A unique, incrementing integer
 	 * @return {String}          The request signature
 	 */
-	function getMessageSignature(path, request, nonce) {
+	private getMessageSignature(path, request, nonce) {
 		var message	= querystring.stringify(request);
-		var secret	= new Buffer(config.secret, 'base64');
-		var hash	= new crypto.createHash('sha256');
-		var hmac	= new crypto.createHmac('sha512', secret);
+		var secret	= new Buffer(this.config.secret, 'base64');
+		var hash	= crypto.createHash('sha256');
+		var hmac	= crypto.createHmac('sha512', secret);
 
-		var hash_digest	= hash.update(nonce + message).digest('binary');
-		var hmac_digest	= hmac.update(path + hash_digest, 'binary').digest('base64');
+		var hash_digest	= hash.update(nonce + message).digest('latin1');
+		var hmac_digest	= hmac.update(path + hash_digest, 'latin1').digest('base64');
 
 		return hmac_digest;
 	}
@@ -115,7 +118,7 @@ function KrakenClient(key, secret, otp) {
 	 * @param  {Function} callback A callback function to call when the request is complete
 	 * @return {Object}            The request object
 	 */
-	function rawRequest(url, headers, params, callback) {
+	private rawRequest(url, headers, params, callback) {
 		// Set custom User-Agent string
 		headers['User-Agent'] = 'Kraken Javascript API Client';
 
@@ -124,7 +127,7 @@ function KrakenClient(key, secret, otp) {
 			method: 'POST',
 			headers: headers,
 			form: params,
-			timeout: config.timeoutMS
+			timeout: this.config.timeoutMS
 		};
 
 		var req = request.post(options, function(error, response, body) {
@@ -132,7 +135,7 @@ function KrakenClient(key, secret, otp) {
 				var data;
 
 				if(error) {
-					callback.call(self, new Error('Error in server response: ' + JSON.stringify(error)), null);
+					callback(new Error('Error in server response: ' + JSON.stringify(error)), null);
 					return;
 				}
 
@@ -140,25 +143,19 @@ function KrakenClient(key, secret, otp) {
 					data = JSON.parse(body);
 				}
 				catch(e) {
-					callback.call(self, new Error('Could not understand response from server: ' + body), null);
+					callback(new Error('Could not understand response from server: ' + body), null);
 					return;
 				}
 
 				if(data.error && data.error.length) {
-					callback.call(self, data.error, null);
+					callback(data.error, null);
 				}
 				else {
-					callback.call(self, null, data);
+					callback(null, data);
 				}
 			}
 		});
 
 		return req;
 	}
-
-	self.api			= api;
-	self.publicMethod	= publicMethod;
-	self.privateMethod	= privateMethod;
 }
-
-module.exports = KrakenClient;
