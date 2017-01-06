@@ -1,5 +1,5 @@
-import {KrakenClient} from '../kraken';
-var kraken = new KrakenClient('', '', undefined);
+import KrakenClient = require('../kraken');
+var kraken = new KrakenClient('', '');
 
 /*
 // Display user's balance

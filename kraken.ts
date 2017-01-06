@@ -8,11 +8,11 @@ import * as querystring from 'query-string';
  * @param {String} secret API Secret
  * @param {String} [otp]  Two-factor password (optional) (also, doesn't work)
  */
-export class KrakenClient {
+class KrakenClient {
 
 	private config: any;
 
-	constructor(key: string, secret: string, otp: string) {
+	constructor(key: string, secret: string, otp?: string) {
 		this.config = {
 				url: 'https://api.kraken.com',
 				version: '0',
@@ -30,7 +30,7 @@ export class KrakenClient {
 	 * @param  {Function} callback A callback function to be executed when the request is complete
 	 * @return {Object}            The request object
 	 */
-	public api(method, params, callback) {
+	public api(method: string, params: any, callback: Function) {
 		var methods = {
 			public: ['Time', 'Assets', 'AssetPairs', 'Ticker', 'Depth', 'Trades', 'Spread', 'OHLC'],
 			private: ['Balance', 'TradeBalance', 'OpenOrders', 'ClosedOrders', 'QueryOrders', 'TradesHistory', 'QueryTrades', 'OpenPositions', 'Ledgers', 'QueryLedgers', 'TradeVolume', 'AddOrder', 'CancelOrder']
@@ -159,3 +159,5 @@ export class KrakenClient {
 		return req;
 	}
 }
+
+export = KrakenClient;

@@ -11,5 +11,5 @@ export = KrakenClient;
 declare class KrakenClient {
     constructor(key: string, secret: string, otp: string);
 
-    myMethod(method: string, params: any, callback: Function): {error: Error, response: any};
+    api(method: string, params: any, callback: Function): {error: Error, response: any};
 }

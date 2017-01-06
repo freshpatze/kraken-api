@@ -93,4 +93,4 @@ var KrakenClient = (function () {
     };
     return KrakenClient;
 }());
-exports.KrakenClient = KrakenClient;
+module.exports = KrakenClient;
