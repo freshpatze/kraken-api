@@ -1,12 +1,15 @@
 {
   "name": "kraken-exchange-api",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "engines": {
     "node": ">=6.4.0"
   },
   "description": "Kraken API Client for Node.JS",
-  "main": "./build/kraken.js",
-  "types": "./kraken.d.ts",
+  "main": "build/kraken.js",
+  "types": "build/kraken.d.ts",
+  "files": [
+    "build/"
+  ],
   "dependencies": {
     "query-string": ">=4.2.3",
     "request": ">=2.79.0"
