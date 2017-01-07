@@ -1,6 +1,6 @@
 {
   "name": "kraken-exchange-api",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "engines": {
     "node": ">=6.4.0"
   },
@@ -8,7 +8,8 @@
   "main": "build/kraken.js",
   "types": "kraken.d.ts",
   "files": [
-    "build/"
+    "build/",
+    "kraken.d.ts"
   ],
   "dependencies": {
     "query-string": ">=4.2.3",
