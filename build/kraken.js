@@ -1,9 +1,11 @@
 "use strict";
-var request = require("request");
-var crypto = require("crypto");
-var querystring = require("query-string");
+var request = require('request');
+var crypto = require('crypto');
+var querystring = require('query-string');
 var KrakenClient = (function () {
     function KrakenClient(key, secret, otp) {
+        if (key === void 0) { key = ''; }
+        if (secret === void 0) { secret = ''; }
         this.config = {
             url: 'https://api.kraken.com',
             version: '0',

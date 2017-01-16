@@ -9,7 +9,7 @@ export = KrakenClient;
 
 /*~ Write your module's methods and properties in this class */
 declare class KrakenClient {
-    constructor(key: string, secret: string, otp?: string);
+    constructor(key?: string, secret?: string, otp?: string);
 
     api(method: string, params: any, callback: Function): any;
 }

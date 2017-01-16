@@ -12,7 +12,7 @@ class KrakenClient {
 
 	private config: any;
 
-	constructor(key: string, secret: string, otp?: string) {
+	constructor(key = '', secret = '', otp?: string) {
 		this.config = {
 				url: 'https://api.kraken.com',
 				version: '0',
