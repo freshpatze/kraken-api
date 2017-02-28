@@ -12,12 +12,11 @@
     "kraken.d.ts"
   ],
   "dependencies": {
-    "query-string": ">=4.2.3",
+    "qs": "^6.3.1",
     "request": ">=2.79.0"
   },
   "devDependencies": {
     "@types/node": "^6.0.58",
-    "@types/query-string": "^3.0.31",
     "@types/request": "0.0.39"
   },
   "scripts": {

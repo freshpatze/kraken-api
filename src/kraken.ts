@@ -1,6 +1,6 @@
 import * as request from 'request';
 import * as crypto from 'crypto';
-import * as querystring from 'query-string';
+import * as querystring from 'qs';
 
 /**
  * KrakenClient connects to the Kraken.com API
@@ -99,7 +99,7 @@ class KrakenClient {
 	 * @return {String}          The request signature
 	 */
 	private getMessageSignature(path, request, nonce) {
-		var message	= querystring.stringify(request);
+		var message	= querystring.stringify(request, { encodeValuesOnly: true });
 		var secret	= new Buffer(this.config.secret, 'base64');
 		var hash	= crypto.createHash('sha256');
 		var hmac	= crypto.createHmac('sha512', secret);

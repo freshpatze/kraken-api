@@ -1,7 +1,7 @@
 "use strict";
 var request = require('request');
 var crypto = require('crypto');
-var querystring = require('query-string');
+var querystring = require('qs');
 var KrakenClient = (function () {
     function KrakenClient(key, secret, otp) {
         if (key === void 0) { key = ''; }
@@ -52,7 +52,7 @@ var KrakenClient = (function () {
         return this.rawRequest(url, headers, params, callback);
     };
     KrakenClient.prototype.getMessageSignature = function (path, request, nonce) {
-        var message = querystring.stringify(request);
+        var message = querystring.stringify(request, { encodeValuesOnly: true });
         var secret = new Buffer(this.config.secret, 'base64');
         var hash = crypto.createHash('sha256');
         var hmac = crypto.createHmac('sha512', secret);
